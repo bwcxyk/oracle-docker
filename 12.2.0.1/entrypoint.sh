@@ -67,7 +67,7 @@ case "$1" in
 			export IMPORT_FROM_VOLUME=true
 
 			if [ -z "$CHARACTER_SET" ]; then
-				export CHARACTER_SET="AL32UTF8"
+				export CHARACTER_SET="ZHS16GBK"
 			fi
 
 			mv /u01/app/oracle-product/12.2.0/db_1/dbs /u01/app/oracle/dbs
