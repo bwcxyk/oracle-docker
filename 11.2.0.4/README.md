@@ -36,7 +36,7 @@ docker run -d --name oracledb \
 -e PGA_SIZE=512M \
 -e DB_ROLE=primary \
 -e ENABLE_ARCH=true \
--v /data/dbalex:/opt/oracle/oradata \
+-v /data/oracle:/opt/oracle/oradata \
 oracle:11.2.0.4.0-ee
 
 PS:目前只能设置DB_ROLE为primary，standby尚不提供支持。
