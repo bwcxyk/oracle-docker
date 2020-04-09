@@ -13,7 +13,6 @@ docker build -t oracle:12.2.0.1-ee .
 docker run --name <container name> \
 -p <host port>:1521 -p <host port>:5500 \
 -e ORACLE_SID=<your SID> \
--e ORACLE_PDB=<your PDB name> \
 -e ORACLE_PWD=<your database passwords> \
 -e ORACLE_CHARACTERSET=<your character set> \
 -v [<host mount point>:]/opt/oracle/oradata \
@@ -24,7 +23,6 @@ Parameters:
    -p:            The port mapping of the host port to the container port. 
                   Two ports are exposed: 1521 (Oracle Listener), 5500 (OEM Express)
    -e ORACLE_SID: The Oracle Database SID that should be used (default: ORCLCDB)
-   -e ORACLE_PDB: The Oracle Database PDB name that should be used (default: ORCLPDB1)
    -e ORACLE_PWD: The Oracle Database SYS, SYSTEM and PDB_ADMIN password (default: auto generated)
    -e ORACLE_CHARACTERSET:
                   The character set to use when creating the database (default: AL32UTF8)
@@ -38,5 +36,15 @@ Parameters:
    -v /opt/oracle/scripts/setup | /docker-entrypoint-initdb.d/setup
                   Optional: A volume with custom scripts to be run after database setup.
                   For further details see the "Running scripts after setup and on startup" section below.
+```
+
+```
+docker run -d --name oracledb \
+-p 1521:1521 \
+-e ORACLE_SID=orcl \
+-e ORACLE_PWD=oracle \
+-e ORACLE_CHARACTERSET=ZHS16GBK \
+-v /data/oracle:/opt/oracle/oradata \
+oracle:12.2.0.1-ee
 ```
 

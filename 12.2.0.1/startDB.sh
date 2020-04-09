@@ -1,11 +1,14 @@
 #!/bin/bash
-# LICENSE GPL 3.0
+# LICENSE UPL 1.0
 #
-# Copyright (c) 2019-2020 bwcx co,ltd. All rights reserved.
+# Copyright (c) 1982-2016 Oracle and/or its affiliates. All rights reserved.
 #
+# Since: November, 2016
+# Author: gerald.venzl@oracle.com
 # Description: Starts the Listener and Oracle Database.
 #              The ORACLE_HOME and the PATH has to be set.
 # 
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 # 
 
 # Check that ORACLE_HOME is set

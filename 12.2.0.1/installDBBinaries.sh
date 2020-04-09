@@ -1,10 +1,17 @@
 #!/bin/bash
-# LICENSE GPL 3.0
+# LICENSE UPL 1.0
 #
-# Copyright (c) 2019-2020 bwcx co,ltd. All rights reserved.
+# Copyright (c) 1982-2016 Oracle and/or its affiliates. All rights reserved.
 #
+# Since: December, 2016
+# Author: gerald.venzl@oracle.com
 # Description: Sets up the unix environment for DB installation.
 # 
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+# 
+
+# Convert $1 into upper case via "^^" (bash version 4 onwards)
+
 
 # Check whether ORACLE_BASE is set
 if [ "$ORACLE_BASE" == "" ]; then
@@ -20,6 +27,7 @@ if [ "$ORACLE_HOME" == "" ]; then
    exit 1;
 fi;
 
+
 # Replace place holders
 # ---------------------
 sed -i -e "s|###ORACLE_EDITION###|$EDITION|g" $INSTALL_DIR/$INSTALL_RSP && \
@@ -30,7 +38,7 @@ sed -i -e "s|###ORACLE_HOME###|$ORACLE_HOME|g" $INSTALL_DIR/$INSTALL_RSP
 cd $INSTALL_DIR       && \
 unzip $INSTALL_FILE_1 && \
 rm $INSTALL_FILE_1    && \
-$INSTALL_DIR/database/runInstaller -silent -showProgress -force -waitforcompletion -responsefile $INSTALL_DIR/$INSTALL_RSP -ignoresysprereqs -ignoreprereq && \
+$INSTALL_DIR/database/runInstaller -silent -force -waitforcompletion -responsefile $INSTALL_DIR/$INSTALL_RSP -ignoresysprereqs -ignoreprereq && \
 cd $HOME
 
 # Remove not needed components
@@ -56,5 +64,7 @@ rm -rf $ORACLE_HOME/dmu && \
 rm -rf $ORACLE_HOME/install/pilot && \
 # Support tools
 rm -rf $ORACLE_HOME/suptools && \
+# Temp location
+rm -rf /tmp/* && \
 # Database files directory
 rm -rf $INSTALL_DIR/database

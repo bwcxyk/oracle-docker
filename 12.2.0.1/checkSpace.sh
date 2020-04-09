@@ -1,9 +1,13 @@
 #!/bin/bash
-# LICENSE GPL 3.0
+# LICENSE UPL 1.0
 #
-# Copyright (c) 2019-2020 bwcx co,ltd. All rights reserved.
+# Copyright (c) 1982-2017 Oracle and/or its affiliates. All rights reserved.
 #
+# Since: January, 2017
+# Author: gerald.venzl@oracle.com
 # Description: Checks the available space of the system.
+# 
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 # 
 
 REQUIRED_SPACE_GB=15

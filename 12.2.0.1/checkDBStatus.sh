@@ -1,12 +1,15 @@
 #!/bin/bash
-# LICENSE GPL 3.0
+# LICENSE UPL 1.0
 #
-# Copyright (c) 2019-2020 bwcx co,ltd. All rights reserved.
+# Copyright (c) 1982-2018 Oracle and/or its affiliates. All rights reserved.
 #
+# Since: May, 2017
+# Author: gerald.venzl@oracle.com
 # Description: Checks the status of Oracle Database.
 # Return codes: 0 = PDB is open and ready to use
 #               1 = PDB is not open
 #               2 = Sql Plus execution failed
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 # 
 
 ORACLE_SID="`grep $ORACLE_HOME /etc/oratab | cut -d: -f1`"
