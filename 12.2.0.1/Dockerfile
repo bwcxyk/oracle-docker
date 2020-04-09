@@ -1,36 +1,72 @@
-FROM centos:7 as base
+# LICENSE GPL 3.0
+#
+# Copyright (c) 2019-2020 bwcx co,ltd. All rights reserved.
+#
+# ORACLE DOCKERFILES PROJECT
+# --------------------------
+# This is the Dockerfile for Oracle Database 12c Release 2
+# 
+# REQUIRED FILES TO BUILD THIS IMAGE
+# ----------------------------------
+# (1) linuxx64_12201_database.zip
+#
+# HOW TO BUILD THIS IMAGE
+# -----------------------
+# Put all downloaded files in the same directory as this Dockerfile
+# Run: 
+#      $ docker build -t oracle:11.2.0.4.0-ee . 
+#
+# Pull base image
+# ---------------
+FROM centos:7.6.1810
 
-RUN yum install -y wget unzip binutils.x86_64 compat-libcap1.x86_64 gcc.x86_64 gcc-c++.x86_64 glibc.i686 glibc.x86_64 \
-glibc-devel.i686 glibc-devel.x86_64 ksh compat-libstdc++-33 libaio.i686 libaio.x86_64 libaio-devel.i686 libaio-devel.x86_64 \
-libgcc.i686 libgcc.x86_64 libstdc++.i686 libstdc++.x86_64 libstdc++-devel.i686 libstdc++-devel.x86_64 libXi.i686 libXi.x86_64 \
-libXtst.i686 libXtst.x86_64 make.x86_64 sysstat.x86_64 && yum clean all
+# Environment variables required for this build (do NOT change)
+# -------------------------------------------------------------
+ENV ORACLE_BASE=/opt/oracle \
+    ORACLE_HOME=/opt/oracle/product/12.2.0.1/dbhome_1 \
+    INSTALL_FILE_1="linuxx64_12201_database.zip" \
+    INSTALL_RSP="db_inst.rsp" \
+    CONFIG_RSP="dbca.rsp.tmpl" \
+    RUN_FILE="runOracle.sh" \
+    START_FILE="startDB.sh" \
+    CREATE_DB_FILE="createDB.sh" \
+    SETUP_LINUX_FILE="setupLinuxEnv.sh" \
+    CHECK_SPACE_FILE="checkSpace.sh" \
+    CHECK_DB_FILE="checkDBStatus.sh" \
+    INSTALL_DB_BINARIES_FILE="installDBBinaries.sh"
 
-COPY oracle_12c_install.sh \
-oracle-12c-ee.rsp \
-linuxx64_12201_database.zip \
-/install/
+# Use second ENV so that variable get substituted
+ENV INSTALL_DIR=$ORACLE_BASE/install \
+    PATH=$ORACLE_HOME/bin:$ORACLE_HOME/OPatch/:/usr/sbin:$PATH \
+    LD_LIBRARY_PATH=$ORACLE_HOME/lib:/usr/lib \
+    CLASSPATH=$ORACLE_HOME/jlib:$ORACLE_HOME/rdbms/jlib
 
-RUN /install/oracle_12c_install.sh /install/oracle-12c-ee.rsp
+# Copy binaries
+# -------------
+COPY $SETUP_LINUX_FILE $CHECK_SPACE_FILE $INSTALL_FILE_1 $INSTALL_RSP $INSTALL_DB_BINARIES_FILE $INSTALL_DIR/
+COPY $RUN_FILE $START_FILE $CREATE_DB_FILE $CONFIG_RSP $CHECK_DB_FILE $ORACLE_BASE/
 
-FROM base
+RUN chmod ug+x $INSTALL_DIR/*.sh && \
+    sync && \
+    $INSTALL_DIR/$CHECK_SPACE_FILE && \
+    $INSTALL_DIR/$SETUP_LINUX_FILE
 
-ENV INIT_MEM_PST 40
-ENV ORACLE_SID=orcl
-ENV ORACLE_HOME=/u01/app/oracle/product/12.2.0/db_1
-ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/u01/app/oracle/product/12.2.0/db_1/bin
-ENV DISPLAY :0
-ENV VNC_PASSWORD oracle
-ENV WEB_CONSOLE false
-ENV MANUAL_DBCA false
+# Install DB software binaries
+USER oracle
+RUN $INSTALL_DIR/$INSTALL_DB_BINARIES_FILE
 
-RUN yum install -y epel-release && yum install -y xorg-x11-server-Xvfb x11vnc fluxbox xterm novnc && yum clean all
+USER root
+RUN $ORACLE_BASE/oraInventory/orainstRoot.sh && \
+    $ORACLE_HOME/root.sh && \
+    rm -rf $INSTALL_DIR/*
 
-COPY entrypoint.sh /
+USER oracle
+WORKDIR /home/oracle
 
+VOLUME ["$ORACLE_BASE/oradata"]
 EXPOSE 1521
-EXPOSE 8080
-EXPOSE 6800
-VOLUME ["/docker-entrypoint-initdb.d"]
+HEALTHCHECK --interval=1m --start-period=5m \
+   CMD "$ORACLE_BASE/$CHECK_DB_FILE" >/dev/null || exit 1
 
-ENTRYPOINT ["/entrypoint.sh"]
-CMD [""]
+# Define default command to start Oracle Database. 
+CMD exec $ORACLE_BASE/$RUN_FILE

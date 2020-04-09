@@ -21,7 +21,7 @@ Oracle官方在Github上提供了一些Oracle Docker image，但并未提供11g 
 1. 下载本目录的所有文件
 2. 下载11.2.0.4 Patchset：p13390677_112040_Linux-x86-64_1of7.zip p13390677_112040_Linux-x86-64_2of7.zip
 3. 执行构建命令：
-docker build -t oracle:11.2.0.4.0-ee .
+docker build -t oracle:11.2.0.4-ee .
 ```
 
 ### Image使用举例
