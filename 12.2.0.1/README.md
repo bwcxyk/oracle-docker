@@ -17,7 +17,7 @@ docker run --name <container name> \
 -e ORACLE_PWD=<your database passwords> \
 -e ORACLE_CHARACTERSET=<your character set> \
 -v [<host mount point>:]/opt/oracle/oradata \
-oracle/database:19.3.0-ee
+oracle:12.2.0.1-ee
 
 Parameters:
    --name:        The name of the container (default: auto generated)
