@@ -20,13 +20,12 @@
 #
 # Pull base image
 # ---------------
-FROM oraclelinux:7-slim as base
+FROM centos:7.6.1810 as base
 
 # Environment variables required for this build (do NOT change)
 # -------------------------------------------------------------
 ENV ORACLE_BASE=/opt/oracle \
     ORACLE_HOME=/opt/oracle/product/12.2.0.1/dbhome_1 \
-    INSTALL_DIR=/opt/install \
     INSTALL_FILE_1="linuxx64_12201_database.zip" \
     INSTALL_RSP="db_inst.rsp" \
     CONFIG_RSP="dbca.rsp.tmpl" \
@@ -39,7 +38,8 @@ ENV ORACLE_BASE=/opt/oracle \
     INSTALL_DB_BINARIES_FILE="installDBBinaries.sh"
 
 # Use second ENV so that variable get substituted
-ENV PATH=$ORACLE_HOME/bin:$ORACLE_HOME/OPatch/:/usr/sbin:$PATH \
+ENV INSTALL_DIR=/opt/install \
+    PATH=$ORACLE_HOME/bin:$ORACLE_HOME/OPatch/:/usr/sbin:$PATH \
     LD_LIBRARY_PATH=$ORACLE_HOME/lib:/usr/lib \
     CLASSPATH=$ORACLE_HOME/jlib:$ORACLE_HOME/rdbms/jlib
 
@@ -91,7 +91,8 @@ USER oracle
 COPY --chown=oracle:dba --from=builder $ORACLE_BASE $ORACLE_BASE
 
 USER root
-RUN $ORACLE_BASE/oraInventory/orainstRoot.sh && \
+RUN chmod ug+x $ORACLE_BASE/*.sh && \
+    $ORACLE_BASE/oraInventory/orainstRoot.sh && \
     $ORACLE_HOME/root.sh
 
 USER oracle
