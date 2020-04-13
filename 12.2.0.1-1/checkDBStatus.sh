@@ -31,9 +31,6 @@ ret=$?
 # SQL Plus execution was successful and PDB is open
 if [ $ret -eq 0 ] && [ "$status" = "$OPEN_MODE" ]; then
    exit 0;
-# PDB is not open
-elif [ "$status" != "$OPEN_MODE" ]; then
-   exit 1;
 # SQL Plus execution failed
 else
    exit 2;

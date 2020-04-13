@@ -1,4 +1,4 @@
-不想使用Oracle12C新特性PDB，请查看[Oracle12C非容器数据库](https://github.com/bwcxyk/oracle-docker/blob/master/12.2.0.1-1/README.md)
+不想使用Oracle12C新特性PDB，请查看[Oracle12C非容器数据库](https://github.com/bwcxyk/oracle-docker/blob/master/12.2.0.1-1)
 
 ### Image构建
 
