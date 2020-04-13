@@ -1,3 +1,5 @@
+不想使用Oracle12C新特性PDB，请查看[Oracle12C非容器数据库](https://github.com/bwcxyk/oracle-docker/blob/master/12.2.0.1-1/README.md)
+
 ### Image构建
 
 ```
@@ -13,6 +15,7 @@ docker build -t oracle:12.2.0.1-ee .
 docker run --name <container name> \
 -p <host port>:1521 -p <host port>:5500 \
 -e ORACLE_SID=<your SID> \
+-e ORACLE_PDB=<your PDB name> \
 -e ORACLE_PWD=<your database passwords> \
 -e ORACLE_CHARACTERSET=<your character set> \
 -v [<host mount point>:]/opt/oracle/oradata \
