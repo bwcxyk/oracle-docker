@@ -1,3 +1,5 @@
+**该镜像不启用Oracle12C的新特性PDB**
+
 ### Image构建
 
 ```
@@ -23,7 +25,6 @@ Parameters:
    -p:            The port mapping of the host port to the container port. 
                   Two ports are exposed: 1521 (Oracle Listener), 5500 (OEM Express)
    -e ORACLE_SID: The Oracle Database SID that should be used (default: ORCLCDB)
-   -e ORACLE_PDB: The Oracle Database PDB name that should be used (default: ORCLPDB1)
    -e ORACLE_PWD: The Oracle Database SYS, SYSTEM and PDB_ADMIN password (default: auto generated)
    -e ORACLE_CHARACTERSET:
                   The character set to use when creating the database (default: AL32UTF8)
@@ -43,7 +44,6 @@ Parameters:
 docker run -d --name oracledb \
 -p 1521:1521 \
 -e ORACLE_SID=orcl \
--e ORACLE_PDB=pdb1 \
 -e ORACLE_PWD=oracle \
 -e ORACLE_CHARACTERSET=ZHS16GBK \
 -v /data/oracle:/opt/oracle/oradata \
