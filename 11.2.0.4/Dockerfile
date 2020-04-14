@@ -15,11 +15,11 @@
 # -----------------------
 # Put all downloaded files in the same directory as this Dockerfile
 # Run: 
-#      $ docker build -t oracle/database:11.2.0.4.0-ee . 
+#      $ docker build -t oracle:11.2.0.4-ee . 
 #
 # Pull base image
 # ---------------
-FROM centos:7.6.1810
+FROM centos:7.6.1810 as base
 
 # Environment variables required for this build (do NOT change)
 # -------------------------------------------------------------
@@ -53,14 +53,43 @@ COPY $RUN_FILE $START_FILE $CREATE_DB_FILE $CREATE_STB_FILE $START_MRP $CONFIG_R
 RUN chmod ug+x $INSTALL_DIR/*.sh && \
     sync && \
     $INSTALL_DIR/$CHECK_SPACE_FILE && \
-    $INSTALL_DIR/$SETUP_LINUX_FILE
+    $INSTALL_DIR/$SETUP_LINUX_FILE && \
+    rm -rf $INSTALL_DIR
+
+
+#############################################
+# -------------------------------------------
+# Start new stage for installing the database
+# -------------------------------------------
+#############################################
+
+FROM base AS builder
+
+
+# Copy DB install file
+COPY --chown=oracle:oinstall $INSTALL_FILE_1 $INSTALL_FILE_2 $INSTALL_RSP $INSTALL_DB_BINARIES_FILE $INSTALL_DIR/
 
 # Install DB software binaries
 USER oracle
-RUN $INSTALL_DIR/$INSTALL_DB_BINARIES_FILE
+RUN chmod ug+x $INSTALL_DIR/*.sh && \
+    sync && \
+	$INSTALL_DIR/$INSTALL_DB_BINARIES_FILE
+
+
+#############################################
+# -------------------------------------------
+# Start new layer for database runtime
+# -------------------------------------------
+#############################################
+
+FROM base
+
+USER oracle
+COPY --chown=oracle:oinstall --from=builder $ORACLE_BASE $ORACLE_BASE
 
 USER root
-RUN $ORACLE_BASE/oraInventory/orainstRoot.sh && \
+RUN chmod ug+x $ORACLE_BASE/*.sh && \
+    $ORACLE_BASE/oraInventory/orainstRoot.sh && \
     $ORACLE_HOME/root.sh && \
     rm -rf $INSTALL_DIR/*
 
