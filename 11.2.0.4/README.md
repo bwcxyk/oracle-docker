@@ -1,6 +1,6 @@
 ## Oracle Database 11.2.0.4 Docker Image
 
-Oracle官方在Github上提供了一些Oracle Docker image，但并未提供11g R2版本。考虑到目前仍有大量用户使用11g R2，所以，我们参考官方12.1版本image制作了11.2.0.4.0版本的image，并且在其基础上做了进一步丰富和标准化，包括：
+Oracle官方在Github上提供了一些Oracle Docker image，但并未提供11g R2版本。考虑到目前仍有大量用户使用11g R2，所以，我们参考官方12.1版本image制作了11.2.0.4版本的image，并且在其基础上做了进一步丰富和标准化，包括：
 
 - 指定是否开启归档
 - 指定SGA及PGA大小(官方image指定的是固定的内存大小，如需修改，需要在数据库创建之后手动调整，所以，在此我们做了相应的自动化)
