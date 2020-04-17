@@ -31,7 +31,7 @@ docker run -d --name oracledb \
 -p 1521:1521 \
 -e ORACLE_SID=orcl \
 -e ORACLE_PWD=oracle \
--e ORACLE_CHARACTERSET=ZHS16GBK \
+-e ORACLE_CHARACTERSET=AL32UTF8 \
 -e SGA_SIZE=2G \
 -e PGA_SIZE=512M \
 -e DB_ROLE=primary \
