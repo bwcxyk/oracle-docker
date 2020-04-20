@@ -43,7 +43,12 @@ ENV ORACLE_BASE=/opt/oracle \
 ENV INSTALL_DIR=$ORACLE_BASE/install \
     PATH=$ORACLE_HOME/bin:$ORACLE_HOME/OPatch/:/usr/sbin:$PATH \
     LD_LIBRARY_PATH=$ORACLE_HOME/lib:/usr/lib \
-    CLASSPATH=$ORACLE_HOME/jlib:$ORACLE_HOME/rdbms/jlib
+    CLASSPATH=$ORACLE_HOME/jlib:$ORACLE_HOME/rdbms/jlib \
+    ORACLE_PWD=oracle \
+    SGA_SIZE=2G \
+    PGA_SIZE=512M \
+    DB_ROLE=primary \
+    ENABLE_ARCH=true
 
 # Copy binaries
 # -------------
