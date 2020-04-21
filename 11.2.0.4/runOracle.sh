@@ -12,7 +12,6 @@ function moveFiles {
    if [ ! -d $ORACLE_BASE/oradata/dbconfig/$ORACLE_SID ] ; then
       mkdir -p $ORACLE_BASE/oradata/dbconfig/$ORACLE_SID/
    fi;
-   if [ $DB_ROLE == "primary" ] ;then
    mv $ORACLE_HOME/dbs/spfile$ORACLE_SID.ora $ORACLE_BASE/oradata/dbconfig/$ORACLE_SID/
    mv $ORACLE_HOME/dbs/orapw$ORACLE_SID $ORACLE_BASE/oradata/dbconfig/$ORACLE_SID/
    mv $ORACLE_HOME/network/admin/sqlnet.ora $ORACLE_BASE/oradata/dbconfig/$ORACLE_SID/
@@ -20,7 +19,6 @@ function moveFiles {
    mv $ORACLE_HOME/network/admin/tnsnames.ora $ORACLE_BASE/oradata/dbconfig/$ORACLE_SID/tnsnames.ora
    # oracle user does not have permissions in /etc, hence cp and not mv
    cp /etc/oratab $ORACLE_BASE/oradata/dbconfig/$ORACLE_SID/
-   fi
    symLinkFiles;
 }
 
@@ -102,6 +100,13 @@ if [ `cat /sys/fs/cgroup/memory/memory.limit_in_bytes | wc -c` -lt 11 ]; then
    fi;
 fi;
 
+# Check that hostname doesn't container any "_"
+# Github issue #711
+if hostname | grep -q "_"; then
+   echo "Error: The hostname must not container any '_'".
+   echo "Your current hostname is '$(hostname)'"
+fi;
+
 # Set SIGINT handler
 trap _int SIGINT
 
@@ -154,20 +159,14 @@ else
   rm -f $ORACLE_HOME/dbs/orapw$ORACLE_SID
   rm -f $ORACLE_HOME/network/admin/sqlnet.ora
   rm -f $ORACLE_HOME/network/admin/listener.ora
-  #rm -f $ORACLE_HOME/network/admin/tnsnames.ora
+  rm -f $ORACLE_HOME/network/admin/tnsnames.ora
    
   # Create database
-  if [ "$DB_ROLE" == "primary" ]; then
-    $ORACLE_BASE/$CREATE_DB_FILE $ORACLE_SID $ORACLE_PDB $ORACLE_PWD;
-    # Move database operational files to oradata
-    moveFiles;
-  else
-	$ORACLE_BASE/$CREATE_STB_FILE $PRIMARY_SRV
-  fi
+  $ORACLE_BASE/$CREATE_DB_FILE $ORACLE_SID $ORACLE_PDB $ORACLE_PWD;
+  
+  # Move database operational files to oradata
+  moveFiles;
 
-   
-  # Execute custom provided setup scripts
-  #$ORACLE_BASE/$USER_SCRIPTS_FILE $ORACLE_BASE/scripts/setup
 fi;
 
 # Check whether database is up and running
@@ -178,8 +177,6 @@ if [ "$status" -eq 0 ] || [ "$status" -eq 4 ] ; then
   echo "DATABASE IS READY TO USE!"
   echo "#########################"
   
-  # Execute custom provided startup scripts
-  #$ORACLE_BASE/$USER_SCRIPTS_FILE $ORACLE_BASE/scripts/startup
   
 else
   echo "#####################################"

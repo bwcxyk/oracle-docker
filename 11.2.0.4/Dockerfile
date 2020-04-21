@@ -32,8 +32,6 @@ ENV ORACLE_BASE=/opt/oracle \
     RUN_FILE="runOracle.sh" \
     START_FILE="startDB.sh" \
     CREATE_DB_FILE="createDB.sh" \
-    CREATE_STB_FILE="createSTB.sh" \
-    START_MRP="startMRP.sh" \
     SETUP_LINUX_FILE="setupLinuxEnv.sh" \
     CHECK_SPACE_FILE="checkSpace.sh" \
     CHECK_DB_FILE="checkDBStatus.sh" \
@@ -47,13 +45,12 @@ ENV INSTALL_DIR=$ORACLE_BASE/install \
     ORACLE_PWD=oracle \
     SGA_SIZE=2.5G \
     PGA_SIZE=512M \
-    DB_ROLE=primary \
     ENABLE_ARCH=true
 
 # Copy binaries
 # -------------
 COPY $INSTALL_FILE_1 $INSTALL_FILE_2 $INSTALL_RSP $SETUP_LINUX_FILE $CHECK_SPACE_FILE $INSTALL_DB_BINARIES_FILE $INSTALL_DIR/
-COPY $RUN_FILE $START_FILE $CREATE_DB_FILE $CREATE_STB_FILE $START_MRP $CONFIG_RSP $CHECK_DB_FILE $ORACLE_BASE/
+COPY $RUN_FILE $START_FILE $CREATE_DB_FILE $CONFIG_RSP $CHECK_DB_FILE $ORACLE_BASE/
 
 RUN chmod ug+x $INSTALL_DIR/*.sh && \
     sync && \

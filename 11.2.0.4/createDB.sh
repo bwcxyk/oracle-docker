@@ -86,40 +86,8 @@ sqlplus / as sysdba << EOF
    alter system set sga_target=$SGA_SIZE scope=spfile;
    alter system set sga_max_size=$SGA_SIZE scope=spfile;
    alter system set pga_aggregate_target=$PGA_SIZE scope=spfile;
-   alter system set audit_trail=none scope=spfile;
-   alter system set audit_sys_operations=false scope=spfile;
-   alter system set filesystemio_options=directio scope=spfile;
    alter system set log_archive_dest_1='location=/opt/oracle/oradata/$ORACLE_SID/archivelog';
-   ALTER SYSTEM SET control_files='$ORACLE_BASE/oradata/$ORACLE_SID/control01.ctl' scope=spfile;
-   SHUTDOWN IMMEDIATE;
-   STARTUP;
-   declare
-     CURSOR c_cursor IS SELECT file_name,file_id from dba_data_files;
-     v_fileid number;
-     v_filename varchar2(100);
-   begin
-   execute immediate 'alter database tempfile 1 resize 30G';
-   OPEN c_cursor;
-   FETCH c_cursor INTO v_filename, v_fileid;
-   WHILE c_cursor%FOUND LOOP
-     if instr(v_filename,'system') <> 0 then
-     execute immediate 'alter database datafile ' || v_fileid || ' resize 1G';
-     end if;
-     if instr(v_filename,'sysaux') <> 0 then
-     execute immediate 'alter database datafile ' || v_fileid || ' resize 1G';
-     end if;
-     if instr(v_filename,'undo') <> 0 then
-     execute immediate 'alter database datafile ' || v_fileid || ' resize 10G';
-     end if;
-     FETCH c_cursor INTO v_filename, v_fileid;
-   END LOOP;
-   CLOSE c_cursor;
-   END;
-   /
-   alter system set db_create_file_dest='/opt/oracle/oradata';
-   alter system set db_create_online_log_dest_1='/opt/oracle/oradata';
-   alter database force logging;
-   alter system set STANDBY_FILE_MANAGEMENT=AUTO;
+   ALTER SYSTEM set control_files='$ORACLE_BASE/oradata/$ORACLE_SID/control01.ctl' scope=spfile;
    EXEC DBMS_STATS.SET_GLOBAL_PREFS('CONCURRENT','FALSE');
    alter profile default limit PASSWORD_LIFE_TIME unlimited;
    exit;

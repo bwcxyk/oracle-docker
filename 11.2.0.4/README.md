@@ -10,23 +10,12 @@ Oracle官方在Github上提供了一些Oracle Docker image，但并未提供11g 
   >
   > MEMORY_MAX_TARGET =SGA+PGA
 
-- 指定数据库角色，包括primary及standby(官方镜像只能创建primary数据库)
-
-- 包含对主库实例状态的健康检查
 
 - Online redo log自动调整为1G大小
 
 - 设置用户名密码永不过期(虽不安全，但在绝大部分企业级用户均采用此实践)
 
 - 关闭Concurrent Statistics Gathering功能
-
-- TEMP表空间设置为30G大小
-
-- SYSTEM表空间设置为1G大小
-
-- SYSAUX表空间设置为1G大小
-
-- UNDO表空间设置为10G大小
 
 
 ### Image构建
@@ -46,12 +35,10 @@ docker run -d --name oracledb \
 -e ORACLE_SID=orcl \
 -e ORACLE_PWD=oracle \
 -e ORACLE_CHARACTERSET=AL32UTF8 \
--e SGA_SIZE=2.5G \
--e PGA_SIZE=0.5G \
--e DB_ROLE=primary \
+-e SGA_SIZE=2560M \
+-e PGA_SIZE=512M \
 -e ENABLE_ARCH=true \
 -v /data/oracle:/opt/oracle/oradata \
 oracle:11.2.0.4-ee
 
-PS:目前只能设置DB_ROLE为primary，standby尚不提供支持。
 ```
