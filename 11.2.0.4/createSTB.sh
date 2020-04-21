@@ -5,7 +5,6 @@
 #
 # Description: Creates an Oracle Database based on following parameters:
 #              $ORACLE_SID: The Oracle SID and CDB name
-#              $ORACLE_PDB: The PDB name
 #              $ORACLE_PWD: The Oracle password
 # 
 

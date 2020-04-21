@@ -3,15 +3,29 @@
 Oracle官方在Github上提供了一些Oracle Docker image，但并未提供11g R2版本。考虑到目前仍有大量用户使用11g R2，所以，我们参考官方12.1版本image制作了11.2.0.4版本的image，并且在其基础上做了进一步丰富和标准化，包括：
 
 - 指定是否开启归档
-- 指定SGA及PGA大小(官方image指定的是固定的内存大小，如需修改，需要在数据库创建之后手动调整，所以，在此我们做了相应的自动化)
+
+- 指定SGA及PGA大小
+
+  > ORACLE给的建议是: OLTP系统SGA=(system_total_memory * 80%) * 80%，PGA=(system_total_memory * 80%) * 20%
+  >
+  > MEMORY_MAX_TARGET =SGA+PGA
+
 - 指定数据库角色，包括primary及standby(官方镜像只能创建primary数据库)
-- 包含对主库实例状态、备库实例状态和MRP恢复状态的健康检查
-- ONLINE REDO LOG自动调整为1G大小
+
+- 包含对主库实例状态的健康检查
+
+- Online redo log自动调整为1G大小
+
 - 设置用户名密码永不过期(虽不安全，但在绝大部分企业级用户均采用此实践)
+
 - 关闭Concurrent Statistics Gathering功能
+
 - TEMP表空间设置为30G大小
+
 - SYSTEM表空间设置为1G大小
+
 - SYSAUX表空间设置为1G大小
+
 - UNDO表空间设置为10G大小
 
 
@@ -32,8 +46,8 @@ docker run -d --name oracledb \
 -e ORACLE_SID=orcl \
 -e ORACLE_PWD=oracle \
 -e ORACLE_CHARACTERSET=AL32UTF8 \
--e SGA_SIZE=2G \
--e PGA_SIZE=512M \
+-e SGA_SIZE=2.5G \
+-e PGA_SIZE=0.5G \
 -e DB_ROLE=primary \
 -e ENABLE_ARCH=true \
 -v /data/oracle:/opt/oracle/oradata \
