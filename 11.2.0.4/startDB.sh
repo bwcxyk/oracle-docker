@@ -24,7 +24,7 @@ if [ "$DB_ROLE" == "primary" ];then
     exit;
 EOF
 else
-	sqlplus / as sysdba << EOF
+    sqlplus / as sysdba << EOF
     STARTUP MOUNT;
     exit;
 EOF

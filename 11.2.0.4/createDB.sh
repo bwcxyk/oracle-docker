@@ -94,7 +94,7 @@ sqlplus / as sysdba << EOF
 EOF
 
 if [ "$ENABLE_ARCH" == "true" ] ; then
-	sqlplus / as sysdba << EOF
+    sqlplus / as sysdba << EOF
     shutdown immediate;
     startup mount;
     alter database archivelog;
