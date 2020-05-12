@@ -43,7 +43,7 @@ ENV INSTALL_DIR=$ORACLE_BASE/install \
     LD_LIBRARY_PATH=$ORACLE_HOME/lib:/usr/lib \
     CLASSPATH=$ORACLE_HOME/jlib:$ORACLE_HOME/rdbms/jlib \
     ORACLE_PWD=oracle \
-    SGA_SIZE=2.5G \
+    SGA_SIZE=2560M \
     PGA_SIZE=512M \
     ENABLE_ARCH=true
 
@@ -75,7 +75,7 @@ COPY --chown=oracle:oinstall $INSTALL_FILE_1 $INSTALL_FILE_2 $INSTALL_RSP $INSTA
 USER oracle
 RUN chmod ug+x $INSTALL_DIR/*.sh && \
     sync && \
-	$INSTALL_DIR/$INSTALL_DB_BINARIES_FILE
+    $INSTALL_DIR/$INSTALL_DB_BINARIES_FILE
 
 
 #############################################
