@@ -18,19 +18,7 @@ fi;
 lsnrctl start
 
 # Start database
-if [ "$DB_ROLE" == "primary" ];then
-    sqlplus / as sysdba << EOF
-    STARTUP;
-    exit;
+sqlplus / as sysdba << EOF
+STARTUP;
+exit;
 EOF
-else
-    sqlplus / as sysdba << EOF
-    STARTUP MOUNT;
-    exit;
-EOF
-fi
-
-# Start MRP
-if [ "$DB_ROLE" == "standby" ] ; then
-/opt/oracle/$START_MRP
-fi;
