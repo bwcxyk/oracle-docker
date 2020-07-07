@@ -62,7 +62,7 @@ DIAG_ADR_ENABLED = off
 " > $ORACLE_HOME/network/admin/listener.ora
 
 # make directory for archivelog
-mkdir -p /opt/oracle/oradata/$ORACLE_SID/archivelog
+mkdir -p /opt/oracle/archivelog
 
 # Start LISTENER and run DBCA
 lsnrctl start &&
