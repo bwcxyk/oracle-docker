@@ -45,7 +45,7 @@ ENV INSTALL_DIR=$ORACLE_BASE/install \
     ORACLE_PWD=oracle \
     SGA_SIZE=2560M \
     PGA_SIZE=512M \
-    ENABLE_ARCH=true
+    ENABLE_ARCH=false
 
 # Copy binaries
 # -------------
