@@ -86,8 +86,8 @@ sqlplus / as sysdba << EOF
    alter system set sga_target=$SGA_SIZE scope=spfile;
    alter system set sga_max_size=$SGA_SIZE scope=spfile;
    alter system set pga_aggregate_target=$PGA_SIZE scope=spfile;
-   alter system set log_archive_dest_1='location=/opt/oracle/oradata/$ORACLE_SID/archivelog';
-   ALTER SYSTEM set control_files='$ORACLE_BASE/oradata/$ORACLE_SID/control01.ctl' scope=spfile;
+   alter system set log_archive_dest_1='location=/opt/oracle/archivelog';
+   alter system set control_files='$ORACLE_BASE/oradata/$ORACLE_SID/control01.ctl' scope=spfile;
    EXEC DBMS_STATS.SET_GLOBAL_PREFS('CONCURRENT','FALSE');
    alter profile default limit PASSWORD_LIFE_TIME unlimited;
    exit;
