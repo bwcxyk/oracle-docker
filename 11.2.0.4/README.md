@@ -40,7 +40,6 @@ docker run -d --name oracledb \
 -e ENABLE_ARCH=true \
 -v /data/oracle/oradata:/opt/oracle/oradata \
 -v /data/oracle/archivelog:/opt/oracle/archivelog \
--v /data/oracle/dpdump:/opt/oracle/admin/orcl/dpdump \
 oracle:11.2.0.4-ee
 
 ```
