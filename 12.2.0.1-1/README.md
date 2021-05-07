@@ -46,15 +46,16 @@ docker run -d --name oracledb \
 -e ORACLE_SID=orcl \
 -e ORACLE_PWD=oracle \
 -e ORACLE_CHARACTERSET=ZHS16GBK \
--v /data/oracle:/opt/oracle/oradata \
+-v /data/oracle/oradata:/opt/oracle/oradata \
+-v /data/oracle/admin:/opt/oracle/admin
 oracle:12.2.0.1-ee
 ```
 
 注意挂载目录时需要修改宿主机目录权限
 
 ```bash
-mkdir /data/oracle
-chown 1000.1000 /data/oracle
+mkdir -p /data/oracle/{oradata,admin}
+chown -R 1000.1000 /data/oracle
 ```
 
 即把宿主机目录调整为与容器oracle用户id一致
