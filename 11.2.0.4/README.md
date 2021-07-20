@@ -38,6 +38,7 @@ docker run -d --name oracledb \
 -e SGA_SIZE=2560M \
 -e PGA_SIZE=512M \
 -e ENABLE_ARCH=true \
+-e TZ=Asia/Shanghai \
 -v /data/oracle/oradata:/opt/oracle/oradata \
 -v /data/oracle/archivelog:/opt/oracle/archivelog \
 oracle:11.2.0.4-ee
