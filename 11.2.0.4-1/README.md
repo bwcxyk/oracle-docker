@@ -43,6 +43,7 @@ docker run -d --name oracledb \
 -e ORACLE_PWD=oracle \
 -e CHARACTER_SET=AL32UTF8 \
 -e DBCA_TOTAL_MEMORY=4096 \
+-e TZ=Asia/Shanghai \
 -v /data/oracle:/u01/app/oracle \
 oracle:11.2.0.4-ee
 ```
