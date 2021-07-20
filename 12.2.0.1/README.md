@@ -49,6 +49,7 @@ docker run -d --name oracledb \
 -e ORACLE_PDB=pdb1 \
 -e ORACLE_PWD=oracle \
 -e ORACLE_CHARACTERSET=ZHS16GBK \
+-e TZ=Asia/Shanghai \
 -v /data/oracle:/opt/oracle/oradata \
 oracle:12.2.0.1-ee
 ```
