@@ -4,4 +4,4 @@
 
 12.2.0.1为Oracle12C R2(12.2.0.1)
 
-12.2.0.1-1为Oracle12C R2(12.2.0.1)未启用Oracle12C新特性CDB和PDB
+12.2.0.1-noncdb为Oracle12C R2(12.2.0.1)非CDB模式

@@ -40,23 +40,15 @@ Parameters:
                   For further details see the "Running scripts after setup and on startup" section below.
 ```
 
+例
+
 ```bash
 docker run -d --name oracledb \
 -p 1521:1521 \
 -e ORACLE_SID=orcl \
--e ORACLE_PWD=oracle \
 -e ORACLE_CHARACTERSET=ZHS16GBK \
 -e TZ=Asia/Shanghai \
--v /data/oracle/oradata:/opt/oracle/oradata \
--v /data/oracle/admin:/opt/oracle/admin
+-v /data/oracle/oradata:/opt/oracle/oradata
 oracle:12.2.0.1-ee
 ```
 
-注意挂载目录时需要修改宿主机目录权限
-
-```bash
-mkdir -p /data/oracle/{oradata,admin}
-chown -R 1000.1000 /data/oracle
-```
-
-即把宿主机目录调整为与容器oracle用户id一致
