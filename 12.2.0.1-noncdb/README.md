@@ -40,7 +40,14 @@ Parameters:
                   For further details see the "Running scripts after setup and on startup" section below.
 ```
 
-例
+先修改目录权限
+
+```bash
+chown -R 54321:54321 /data/oracle/oradata
+chown -R 54321:54321 /data/oracle/admin
+```
+
+再运行容器
 
 ```bash
 docker run -d --name oracledb \
@@ -49,6 +56,7 @@ docker run -d --name oracledb \
 -e ORACLE_CHARACTERSET=ZHS16GBK \
 -e TZ=Asia/Shanghai \
 -v /data/oracle/oradata:/opt/oracle/oradata
+-v /data/oracle/admin:/opt/oracle/admin
 oracle:12.2.0.1-ee
 ```
 
