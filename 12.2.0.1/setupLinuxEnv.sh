@@ -13,21 +13,14 @@
 # Setup filesystem and oracle user
 # Adjust file permissions, go to /opt/oracle as user 'oracle' to proceed with Oracle installation
 # ------------------------------------------------------------
-mkdir -p $ORACLE_BASE/oradata && \
-chmod ug+x $ORACLE_BASE/$RUN_FILE && \
-chmod ug+x $ORACLE_BASE/$CREATE_DB_FILE && \
-yum install -y openssl make gcc binutils gcc-c++ compat-libstdc++ elfutils-libelf-devel elfutils-libelf-devel-static ksh libaio libaio-devel numactl-devel sysstat unixODBC \ unixODBC-devel pcre-devel glibc.i686 unzip sudo
-groupadd dba
-useradd -G dba -d /home/oracle oracle
-echo "oracle ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-mkdir -p $ORACLE_HOME
-mkdir -p $ORACLE_BASE/oradata
-mkdir -p $ORACLE_BASE/oraInventory
-chown -R oracle:dba $ORACLE_BASE/product
-chown -R oracle:dba $ORACLE_BASE/oraInventory
-chown -R oracle:dba $ORACLE_BASE/oradata
-chmod -R 775 $ORACLE_BASE/product
-chmod -R 775 $ORACLE_BASE/oradata
-chmod -R 775 $ORACLE_BASE/oraInventory
+mkdir -p $ORACLE_BASE/scripts/setup && \
+mkdir $ORACLE_BASE/scripts/startup && \
+ln -s $ORACLE_BASE/scripts /docker-entrypoint-initdb.d && \
+mkdir $ORACLE_BASE/oradata && \
+mkdir -p $ORACLE_HOME && \
+chmod ug+x $ORACLE_BASE/*.sh && \
+yum -y install oracle-database-server-12cR2-preinstall openssl && \
+rm -rf /var/cache/yum && \
+ln -s $ORACLE_BASE/$PWD_FILE /home/oracle/ && \
 echo oracle:oracle | chpasswd && \
 chown -R oracle:dba $ORACLE_BASE

@@ -11,7 +11,21 @@
 # 
 
 # Convert $1 into upper case via "^^" (bash version 4 onwards)
+EDITION=${1^^}
 
+# Check whether edition has been passed on
+if [ "$EDITION" == "" ]; then
+   echo "ERROR: No edition has been passed on!"
+   echo "Please specify the correct edition!"
+   exit 1;
+fi;
+
+# Check whether correct edition has been passed on
+if [ "$EDITION" != "EE" -a "$EDITION" != "SE2" ]; then
+   echo "ERROR: Wrong edition has been passed on!"
+   echo "Edition $EDITION is no a valid edition!"
+   exit 1;
+fi;
 
 # Check whether ORACLE_BASE is set
 if [ "$ORACLE_BASE" == "" ]; then
@@ -39,5 +53,32 @@ cd $INSTALL_DIR       && \
 unzip $INSTALL_FILE_1 && \
 rm $INSTALL_FILE_1    && \
 $INSTALL_DIR/database/runInstaller -silent -force -waitforcompletion -responsefile $INSTALL_DIR/$INSTALL_RSP -ignoresysprereqs -ignoreprereq && \
+cd $HOME
+
+# Remove not needed components
+# APEX
+rm -rf $ORACLE_HOME/apex && \
+# ORDS
+rm -rf $ORACLE_HOME/ords && \
+# SQL Developer
+rm -rf $ORACLE_HOME/sqldeveloper && \
+# UCP connection pool
+rm -rf $ORACLE_HOME/ucp && \
+# All installer files
+rm -rf $ORACLE_HOME/lib/*.zip && \
+# OUI backup
+rm -rf $ORACLE_HOME/inventory/backup/* && \
+# Network tools help
+rm -rf $ORACLE_HOME/network/tools/help && \
+# Database upgrade assistant
+rm -rf $ORACLE_HOME/assistants/dbua && \
+# Database migration assistant
+rm -rf $ORACLE_HOME/dmu && \
+# Remove pilot workflow installer
+rm -rf $ORACLE_HOME/install/pilot && \
+# Support tools
+rm -rf $ORACLE_HOME/suptools && \
+# Temp location
+rm -rf /tmp/* && \
 # Database files directory
 rm -rf $INSTALL_DIR/database

@@ -27,23 +27,19 @@ echo "ORACLE PASSWORD FOR SYS, SYSTEM AND PDBADMIN: $ORACLE_PWD";
 
 # Replace place holders in response file
 cp $ORACLE_BASE/$CONFIG_RSP $ORACLE_BASE/dbca.rsp
-echo ORACLE_SID is "${ORACLE_SID}"
 sed -i -e "s|###ORACLE_SID###|$ORACLE_SID|g" $ORACLE_BASE/dbca.rsp
 sed -i -e "s|###ORACLE_PDB###|$ORACLE_PDB|g" $ORACLE_BASE/dbca.rsp
 sed -i -e "s|###ORACLE_PWD###|$ORACLE_PWD|g" $ORACLE_BASE/dbca.rsp
 sed -i -e "s|###ORACLE_CHARACTERSET###|$ORACLE_CHARACTERSET|g" $ORACLE_BASE/dbca.rsp
-sed -i -e "s|###SGA_SIZE###|$SGA_SIZE|g" $ORACLE_BASE/dbca.rsp
-sed -i -e "s|###PGA_SIZE###|$PGA_SIZE|g" $ORACLE_BASE/dbca.rsp
-sed -i -e "s|###CDB_ENABLE###|$CDB_ENABLE|g" $ORACLE_BASE/dbca.rsp
 
 # If there is greater than 8 CPUs default back to dbca memory calculations
 # dbca will automatically pick 40% of available memory for Oracle DB
 # The minimum of 2G is for small environments to guarantee that Oracle has enough memory to function
 # However, bigger environment can and should use more of the available memory
 # This is due to Github Issue #307
-#if [ `nproc` -gt 8 ]; then
-#   sed -i -e "s|totalMemory=2048||g" $ORACLE_BASE/dbca.rsp
-#fi;
+if [ `nproc` -gt 8 ]; then
+   sed -i -e "s|totalMemory=2048||g" $ORACLE_BASE/dbca.rsp
+fi;
 
 # Create network related config files (sqlnet.ora, tnsnames.ora, listener.ora)
 mkdir -p $ORACLE_HOME/network/admin
@@ -81,6 +77,7 @@ echo "$ORACLE_PDB=
 # Remove second control file, fix local_listener, make PDB auto open, enable EM global port
 sqlplus / as sysdba << EOF
    ALTER SYSTEM SET control_files='$ORACLE_BASE/oradata/$ORACLE_SID/control01.ctl' scope=spfile;
+   ALTER SYSTEM SET local_listener='';
    ALTER PLUGGABLE DATABASE $ORACLE_PDB SAVE STATE;
    EXEC DBMS_XDB_CONFIG.SETGLOBALPORTENABLED (TRUE);
    exit;

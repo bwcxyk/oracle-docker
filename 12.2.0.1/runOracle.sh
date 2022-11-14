@@ -35,15 +35,11 @@ function symLinkFiles {
    if [ ! -L $ORACLE_HOME/dbs/spfile$ORACLE_SID.ora ]; then
       ln -s $ORACLE_BASE/oradata/dbconfig/$ORACLE_SID/spfile$ORACLE_SID.ora $ORACLE_HOME/dbs/spfile$ORACLE_SID.ora
    fi;
-
+   
    if [ ! -L $ORACLE_HOME/dbs/orapw$ORACLE_SID ]; then
       ln -s $ORACLE_BASE/oradata/dbconfig/$ORACLE_SID/orapw$ORACLE_SID $ORACLE_HOME/dbs/orapw$ORACLE_SID
    fi;
-
-   if [ ! -L $ORACLE_HOME/dbs/init$ORACLE_SID.ora ]; then
-      cp $ORACLE_HOME/dbs/init.ora $ORACLE_HOME/dbs/init$ORACLE_SID.ora
-   fi;
-
+   
    if [ ! -L $ORACLE_HOME/network/admin/sqlnet.ora ]; then
       ln -s $ORACLE_BASE/oradata/dbconfig/$ORACLE_SID/sqlnet.ora $ORACLE_HOME/network/admin/sqlnet.ora
    fi;
@@ -83,16 +79,6 @@ EOF
    lsnrctl stop
 }
 
-########### SIGKILL handler ############
-function _kill() {
-   echo "SIGKILL received, shutting down database!"
-   sqlplus / as sysdba <<EOF
-   shutdown abort;
-   exit;
-EOF
-   lsnrctl stop
-}
-
 ###################################
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! #
 ############# MAIN ################
@@ -100,16 +86,20 @@ EOF
 ###################################
 
 # Check whether container has enough memory
+if [[ -f /sys/fs/cgroup/cgroup.controllers ]]; then
+   memory=$(cat /sys/fs/cgroup/memory.max)
+else
+   memory=$(cat /sys/fs/cgroup/memory/memory.limit_in_bytes)
+fi
+
 # Github issue #219: Prevent integer overflow,
-# only check if memory digits are less than 11 (single GB range and below) 
-if [ `cat /sys/fs/cgroup/memory/memory.limit_in_bytes | wc -c` -lt 11 ]; then
-   if [ `cat /sys/fs/cgroup/memory/memory.limit_in_bytes` -lt 2147483648 ]; then
-      echo "Error: The container doesn't have enough memory allocated."
-      echo "A database container needs at least 2 GB of memory."
-      echo "You currently only have $((`cat /sys/fs/cgroup/memory/memory.limit_in_bytes`/1024/1024/1024)) GB allocated to the container."
-      exit 1;
-   fi;
-fi;
+# only check if memory digits are less than 11 (single GB range and below)
+if [[ ${memory} != "max" && ${#memory} -lt 11 && ${memory} -lt 2147483648 ]]; then
+   echo "Error: The container doesn't have enough memory allocated."
+   echo "A database container needs at least 2 GB of memory."
+   echo "You currently only have $((memory/1024/1024)) MB allocated to the container."
+   exit 1;
+fi
 
 # Check that hostname doesn't container any "_"
 # Github issue #711
@@ -124,20 +114,21 @@ trap _int SIGINT
 # Set SIGTERM handler
 trap _term SIGTERM
 
-# Set SIGKILL handler
-trap _kill SIGKILL
-
 # Default for ORACLE SID
 if [ "$ORACLE_SID" == "" ]; then
    export ORACLE_SID=ORCLCDB
 else
+  # Make ORACLE_SID upper case
+  # Github issue # 984
+  export ORACLE_SID=${ORACLE_SID^^}
+
   # Check whether SID is no longer than 12 bytes
   # Github issue #246: Cannot start OracleDB image
   if [ "${#ORACLE_SID}" -gt 12 ]; then
      echo "Error: The ORACLE_SID must only be up to 12 characters long."
      exit 1;
   fi;
-  
+
   # Check whether SID is alphanumeric
   # Github issue #246: Cannot start OracleDB image
   if [[ "$ORACLE_SID" =~ [^a-zA-Z0-9] ]]; then
@@ -148,6 +139,10 @@ fi;
 
 # Default for ORACLE PDB
 export ORACLE_PDB=${ORACLE_PDB:-ORCLPDB1}
+
+# Make ORACLE_PDB upper case
+# Github issue # 984
+export ORACLE_PDB=${ORACLE_PDB^^}
 
 # Default for ORACLE CHARACTERSET
 export ORACLE_CHARACTERSET=${ORACLE_CHARACTERSET:-AL32UTF8}
