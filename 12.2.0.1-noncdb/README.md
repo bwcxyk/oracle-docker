@@ -60,3 +60,7 @@ docker run -d --name oracledb \
 oracle:12.2.0.1-ee
 ```
 
+> ORACLE_SID一定要大写，否则你会看到如下提示。
+>
+> ORA-01078: failure in processing system parameters
+> LRM-00109: could not open parameter file
