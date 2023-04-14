@@ -52,7 +52,7 @@ chown -R 54321:54321 /data/oracle/admin
 ```bash
 docker run -d --name oracledb \
 -p 1521:1521 \
--e ORACLE_SID=orcl \
+-e ORACLE_SID=ORCL \
 -e ORACLE_CHARACTERSET=ZHS16GBK \
 -e TZ=Asia/Shanghai \
 -v /data/oracle/oradata:/opt/oracle/oradata \
