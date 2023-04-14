@@ -357,7 +357,7 @@ DBSNMPPASSWORD = ###ORACLE_PWD###
 # Default value : $ORACLE_BASE/oradata
 # Mandatory     : No
 #-----------------------------------------------------------------------------
-DATAFILEDESTINATION = /u01/app/oradata
+DATAFILEDESTINATION =
 
 #-----------------------------------------------------------------------------
 # Name          : RECOVERYAREADESTINATION
@@ -415,7 +415,7 @@ ASMSNMP_PASSWORD=###ORACLE_PWD###
 # Default value : "US7ASCII"
 # Mandatory     : NO
 #-----------------------------------------------------------------------------
-CHARACTERSET = ###CHARACTER_SET###
+CHARACTERSET = ###ORACLE_CHARACTERSET###
 
 #-----------------------------------------------------------------------------
 # Name          : NATIONALCHARACTERSET
@@ -550,7 +550,7 @@ AUTOMATICMEMORYMANAGEMENT = "FALSE"
 # Default value : 
 # Mandatory     : NO
 #-----------------------------------------------------------------------------
-TOTALMEMORY = ###TOTALMEMORY###
+TOTALMEMORY = 2048
 
 
 #-----------------------*** End of CREATEDATABASE section ***------------------------
@@ -866,7 +866,7 @@ GDBNAME = "orcl11.us.oracle.com"
 # Default value : None
 # Mandatory     : Yes, if EMCONFIGURATION is specified
 #-----------------------------------------------------------------------------
-#DBSNMPPASSWORD = "password"
+DBSNMPPASSWORD = ###ORACLE_PWD###
 
 #-----------------------------------------------------------------------------
 # Name          : CENTRALAGENT

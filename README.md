@@ -1,6 +1,6 @@
-11.2.0.4为Oracle11G R2(11.2.0.4)
+11.2.0.4为Oracle11G R2(11.2.0.4)，基于[沃趣科技](https://github.com/woqutech/docker-images)优化
 
-11.2.0.4-1为Oracle11G R2(11.2.0.4)未启用归档，移除无用信息
+11.2.0.4-noarchive为Oracle11G R2(11.2.0.4)，基于[沃趣科技](https://github.com/woqutech/docker-images)修改，未启用归档，去除无用信息
 
 12.2.0.1为Oracle12C R2(12.2.0.1)
 
