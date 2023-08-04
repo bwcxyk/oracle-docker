@@ -155,6 +155,11 @@ if [ -d $ORACLE_BASE/oradata/$ORACLE_SID ]; then
    if [ ! -d $ORACLE_BASE/admin/$ORACLE_SID/adump ]; then
       mkdir -p $ORACLE_BASE/admin/$ORACLE_SID/adump
    fi;
+
+   # Make sure dump file destination exists
+   if [ ! -d $ORACLE_BASE/admin/$ORACLE_SID/dpdump ]; then
+      mkdir -p $ORACLE_BASE/admin/$ORACLE_SID/dpdump
+   fi;
    
    # Start database
    $ORACLE_BASE/$START_FILE;
