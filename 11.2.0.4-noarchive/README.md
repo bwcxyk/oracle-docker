@@ -38,6 +38,7 @@ Parameters:
 先修改目录权限
 
 ```bash
+mkdir -p /data/oracle/{oradata,admin}
 chown -R 54321:54321 /data/oracle/oradata
 chown -R 54321:54321 /data/oracle/admin
 ```
