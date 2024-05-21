@@ -55,6 +55,7 @@ docker run -d --name oracledb \
 -e ORACLE_SID=ORCL \
 -e ORACLE_CHARACTERSET=ZHS16GBK \
 -e TZ=Asia/Shanghai \
+-e LANG=C.UTF-8 \
 -v /data/oracle/oradata:/opt/oracle/oradata \
 -v /data/oracle/admin:/opt/oracle/admin \
 oracle:12.2.0.1-ee
